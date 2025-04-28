@@ -2,8 +2,8 @@
 
 Program for maintaining personal archives
 
-Context is a program for keeping a personal diary and archive and is built on the principle of data tagging. In it, keywords are added separated by commas, then comes the text of the note, then the note is entered into the database. Then a search is carried out by tag and related tags or note number. So with each tag, the related tags will be displayed and then the related notes. Enjoy using it!
-
+Context is a program for keeping a personal diary and archive and is built on the principle of data tagging. In it, keywords are added separated by commas, then comes the text of the note, then the note is entered into the database. Then a search is carried out by tag and related tags or note number. So with each tag, the related tags will be displayed and then the related notes. Enjoy using it!<br>
+<br>
 
 
 
