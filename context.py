@@ -86,10 +86,9 @@ class NoteApp:
         button_frame = Frame(edit_frame)
         button_frame.grid(row=2, column=0, columnspan=2, pady=5, sticky=E)
         
-        Button(button_frame, text="Добавить", command=self.add_note).pack(side=LEFT, padx=5)
+        Button(button_frame, text="Добавить", command=self.add_new_note).pack(side=LEFT, padx=5)
         Button(button_frame, text="Сохранить", command=self.save_note).pack(side=LEFT, padx=5)
         Button(button_frame, text="Удалить", command=self.delete_note).pack(side=LEFT, padx=5)
-        
         
         # Текущий ID заметки (для редактирования)
         self.current_note_id = None
@@ -286,10 +285,11 @@ class NoteApp:
                 "INSERT INTO notes (tags, content) VALUES (?, ?)",
                 (cleaned_tags, content)
             )
-            messagebox.showinfo("Успех", "Заметка добавлена")
+            messagebox.showinfo("Успех", "Новая заметка добавлена")
+            # Получаем ID новой заметки
+            self.current_note_id = self.cursor.lastrowid
         
         self.conn.commit()
-        self.current_note_id = None
         self.clear_fields()
         
         # Обновляем счетчик заметок
@@ -318,17 +318,19 @@ class NoteApp:
             notes_count = self.cursor.fetchone()[0]
             self.notes_count_label.config(text=f"Заметок: {notes_count}")
     
-    def add_note(self):
-        """Очищает поля для создания новой заметки"""
+    def add_new_note(self):
+        """Очищает поля для создания новой заметки и сбрасывает current_note_id"""
         self.current_note_id = None
         self.clear_fields()
+        self.tags_entry.focus_set()  # Устанавливаем фокус на поле тегов
     
     def clear_fields(self):
         self.tags_entry.delete(0, END)
         self.note_text_entry.delete(1.0, END)
-        self.notes_listbox.delete(0, END)
-        self.related_tags_listbox.delete(0, END)
-        self.id_search_entry.delete(0, END)
+        # Не очищаем списки заметок и тегов при добавлении новой заметки
+        # self.notes_listbox.delete(0, END)
+        # self.related_tags_listbox.delete(0, END)
+        # self.id_search_entry.delete(0, END)
 
 if __name__ == "__main__":
     root = Tk()
