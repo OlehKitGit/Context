@@ -86,6 +86,7 @@ class NoteApp:
         button_frame = Frame(edit_frame)
         button_frame.grid(row=2, column=0, columnspan=2, pady=5, sticky=E)
         
+        Button(button_frame, text="Добавить", command=self.add_note).pack(side=LEFT, padx=5)
         Button(button_frame, text="Сохранить", command=self.save_note).pack(side=LEFT, padx=5)
         Button(button_frame, text="Удалить", command=self.delete_note).pack(side=LEFT, padx=5)
         
@@ -316,6 +317,11 @@ class NoteApp:
             self.cursor.execute("SELECT COUNT(*) FROM notes")
             notes_count = self.cursor.fetchone()[0]
             self.notes_count_label.config(text=f"Заметок: {notes_count}")
+    
+    def add_note(self):
+        """Очищает поля для создания новой заметки"""
+        self.current_note_id = None
+        self.clear_fields()
     
     def clear_fields(self):
         self.tags_entry.delete(0, END)
