@@ -86,8 +86,9 @@ class NoteApp:
         button_frame = Frame(edit_frame)
         button_frame.grid(row=2, column=0, columnspan=2, pady=5, sticky=E)
         
-        Button(button_frame, text="Удалить", command=self.delete_note).pack(side=LEFT, padx=5)
         Button(button_frame, text="Сохранить", command=self.save_note).pack(side=LEFT, padx=5)
+        Button(button_frame, text="Удалить", command=self.delete_note).pack(side=LEFT, padx=5)
+        
         
         # Текущий ID заметки (для редактирования)
         self.current_note_id = None
