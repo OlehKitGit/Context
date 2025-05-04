@@ -27,7 +27,7 @@ class NoteApp:
         Label(db_frame, text="Имя:").grid(row=0, column=0, padx=5, pady=5)
         self.db_name_entry = Entry(db_frame, width=10)
         self.db_name_entry.grid(row=0, column=1, padx=5, pady=5)
-        self.db_name_entry.insert(0, "notes.db")  # Пример имени по умолчанию
+        self.db_name_entry.insert(0, "MyDiary.db")  # Пример имени по умолчанию
         
         self.notes_count_label = Label(db_frame, text="Заметок: 0")
         self.notes_count_label.grid(row=0, column=3, padx=5, pady=5)
@@ -66,21 +66,50 @@ class NoteApp:
         self.notes_listbox.pack(pady=5, padx=10, fill=X)
         self.notes_listbox.bind('<<ListboxSelect>>', self.show_note_content)
         
-        # Фрейм для добавления/редактирования заметки (увеличенный)
         edit_frame = LabelFrame(self.root, text="Добавить/Редактировать заметку")
-        edit_frame.pack(pady=10, padx=10, fill=BOTH, expand=True)  # Изменено на fill=BOTH и expand=True
+        edit_frame.pack(pady=10, padx=10, fill=BOTH, expand=True)
         
         Label(edit_frame, text="Слова:").grid(row=0, column=0, padx=5, pady=5, sticky=W)
         self.tags_entry = Entry(edit_frame)
-        self.tags_entry.grid(row=0, column=1, padx=5, pady=5, sticky=EW)
+        self.tags_entry.grid(row=0, column=1, columnspan=2, padx=5, pady=5, sticky=EW)
         
-        Label(edit_frame, text="Текст заметки:").grid(row=1, column=0, padx=5, pady=5, sticky=NW)
-        self.note_text_entry = Text(edit_frame, width=50, height=10)  # Увеличенные размеры
-        self.note_text_entry.grid(row=1, column=1, padx=5, pady=5, sticky=NSEW)
+        # Фрейм для кнопок и текстового поля
+        text_row_frame = Frame(edit_frame)
+        text_row_frame.grid(row=1, column=0, columnspan=3, sticky=NSEW, padx=5, pady=5)
         
-        # Настройка растягивания столбцов и строк
+        # Метка "Текст" и кнопки слева
+        Label(text_row_frame, text="Текст:").grid(row=0, column=0, sticky=NW)
+        
+        # Фрейм для кнопок (прижат к левому краю)
+        button_frame = Frame(text_row_frame)
+        button_frame.grid(row=1, column=0, sticky=NS)
+        
+        # Кнопки "К" и "В" (вертикально)
+        Button(button_frame, text="К", command=self.copy_text, width=2).pack(pady=2)
+        Button(button_frame, text="В", command=self.paste_text, width=2).pack(pady=2)
+        
+        # Текстовое поле с прокруткой (занимает оставшееся пространство)
+        text_frame = Frame(text_row_frame)
+        text_frame.grid(row=1, column=1, sticky=NSEW)
+        
+        scroll_y = Scrollbar(text_frame)
+        scroll_y.pack(side=RIGHT, fill=Y)
+        
+        self.note_text_entry = Text(
+            text_frame, 
+            width=50, 
+            height=10,
+            wrap=WORD,
+            yscrollcommand=scroll_y.set
+        )
+        self.note_text_entry.pack(side=LEFT, fill=BOTH, expand=True)
+        scroll_y.config(command=self.note_text_entry.yview)
+        
+        # Настройка растягивания
         edit_frame.grid_columnconfigure(1, weight=1)
         edit_frame.grid_rowconfigure(1, weight=1)
+        text_row_frame.grid_columnconfigure(1, weight=1)
+        text_row_frame.grid_rowconfigure(1, weight=1)
         
         # Кнопки в отдельном фрейме
         button_frame = Frame(edit_frame)
@@ -92,6 +121,7 @@ class NoteApp:
         
         # Текущий ID заметки (для редактирования)
         self.current_note_id = None
+
     
     def connect_db(self):
         db_name = self.db_name_entry.get().strip()
@@ -162,9 +192,9 @@ class NoteApp:
         
         # Если поиск не по ID, ищем по тегам
         search_terms = self.search_entry.get().strip()
-        #if not search_terms:
-        #    messagebox.showerror("Ошибка", "Введите ключевые слова для поиска или номер заметки")
-        #    return
+        if not search_terms:
+            messagebox.showerror("Ошибка", "Введите ключевые слова для поиска или номер заметки")
+            return
         
         # Сохраняем теги поиска
         self.current_search_tags = [tag.strip() for tag in search_terms.split(',') if tag.strip()]
@@ -354,6 +384,20 @@ class NoteApp:
         """Очищает поля ввода"""
         self.tags_entry.delete(0, END)
         self.note_text_entry.delete(1.0, END)
+
+    def copy_text(self):
+        """Копирует выделенный текст из текстового поля в буфер обмена"""
+        if self.note_text_entry.tag_ranges("sel"):
+            self.root.clipboard_clear()
+            self.root.clipboard_append(self.note_text_entry.get("sel.first", "sel.last"))
+
+    def paste_text(self):
+        """Вставляет текст из буфера обмена в текстовое поле"""
+        try:
+            text = self.root.clipboard_get()
+            self.note_text_entry.insert(INSERT, text)
+        except TclError:
+            pass
 
 if __name__ == "__main__":
     root = Tk()
