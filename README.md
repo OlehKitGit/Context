@@ -6,8 +6,9 @@ Context is a program for keeping a personal diary and archive and is built on th
 <br>
 The program also works on a mobile phone (context_mobile.py) using a Python interpreter (for Android it is PyDroid).
 <br>
+In the mobile version of the application, the "K" and "B" buttons mean copy to clipboard and paste to clipboard, respectively.
 <br>
-
+<br>
 
 Программа для ведения личных архивов
 
@@ -15,6 +16,7 @@ Context является программой для ведения личног
 <br>
 Программа работает и на мобильном телефоне (context_mobile.py) с помощью интерпретатора Python (для Android это PyDroid).
 <br>
+В мобильной версии приложения кнопки "К" и "В" означают соотвественно копировать в буфер обмена и вставить в буфер обмена.
 <br>
 <br>
 
