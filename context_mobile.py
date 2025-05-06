@@ -378,7 +378,7 @@ class NoteApp:
             self.notes_count_label.config(text=f"Заметок: {notes_count}")
             
             # Обновляем список заметок
-            self.search_notes()
+            #self.search_notes()
     
     def clear_fields(self):
         """Очищает поля ввода"""
