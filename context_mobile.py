@@ -322,7 +322,7 @@ class NoteApp:
         self.notes_count_label.config(text=f"Заметок: {notes_count}")
         
         # Обновляем список заметок
-        self.search_notes()
+        #self.search_notes()
     
     def save_note(self):
         """Обновляет существующую заметку"""
