@@ -162,9 +162,9 @@ class NoteApp:
         
         # Если поиск не по ID, ищем по тегам
         search_terms = self.search_entry.get().strip()
-        if not search_terms:
-            messagebox.showerror("Ошибка", "Введите ключевые слова для поиска или номер заметки")
-            return
+        #if not search_terms:
+        #    messagebox.showerror("Ошибка", "Введите ключевые слова для поиска или номер заметки")
+        #    return
         
         # Сохраняем теги поиска
         self.current_search_tags = [tag.strip() for tag in search_terms.split(',') if tag.strip()]
@@ -292,7 +292,7 @@ class NoteApp:
         self.notes_count_label.config(text=f"Заметок: {notes_count}")
         
         # Обновляем список заметок
-        self.search_notes()
+        #self.search_notes()
     
     def save_note(self):
         """Обновляет существующую заметку"""
