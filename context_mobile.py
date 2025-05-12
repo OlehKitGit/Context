@@ -54,8 +54,23 @@ class NoteApp:
         self.related_tags_label = Label(self.root, text="Слова:")
         self.related_tags_label.pack(anchor=W, padx=10)
         
-        self.related_tags_listbox = Listbox(self.root, height=5)
-        self.related_tags_listbox.pack(pady=5, padx=10, fill=X)
+        # Фрейм для списка тегов с прокруткой
+        tags_frame = Frame(self.root)
+        tags_frame.pack(pady=5, padx=10, fill=X)
+        
+        # Создаем вертикальный скроллбар
+        scrollbar = Scrollbar(tags_frame, orient=VERTICAL)
+        
+        # Список тегов с привязкой к скроллбару
+        self.related_tags_listbox = Listbox(
+            tags_frame, 
+            height=5,
+            yscrollcommand=scrollbar.set
+        )
+        self.related_tags_listbox.pack(side=LEFT, fill=BOTH, expand=True)
+        scrollbar.pack(side=RIGHT, fill=Y)
+        scrollbar.config(command=self.related_tags_listbox.yview)
+        
         self.related_tags_listbox.bind('<<ListboxSelect>>', self.show_notes_by_tag)
         
         # Список заметок (уменьшенный)
@@ -122,7 +137,7 @@ class NoteApp:
         # Текущий ID заметки (для редактирования)
         self.current_note_id = None
 
-    
+    # Остальные методы класса остаются без изменений
     def connect_db(self):
         db_name = self.db_name_entry.get().strip()
         if not db_name:
